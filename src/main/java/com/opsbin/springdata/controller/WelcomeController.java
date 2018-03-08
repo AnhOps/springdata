@@ -11,8 +11,8 @@ public class WelcomeController {
     @Autowired
     private Environment environment;
 
-    @GetMapping("/")
-    public String welcome() {
+    @GetMapping("/hi")
+    public String hi() {
         String test = environment.getProperty("testhang");
         return "welcome, " + test + " :)";
     }
