@@ -8,7 +8,7 @@
 
         <link rel="apple-touch-icon" sizes="57x57" th:href="@{/assets/images/favicon/apple-icon-57x57.png}" />
         <link rel="apple-touch-icon" sizes="60x60" th:href="@{/assets/images/favicon/apple-icon-60x60.png}" />
-        <link rel="apple-touch-icon" sizes="72x72" th:href="@{assets/images/favicon/apple-icon-72x72.png}" />
+        <link rel="apple-touch-icon" sizes="72x72" th:href="@{/assets/images/favicon/apple-icon-72x72.png}" />
         <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/images/favicon/apple-icon-76x76.png}" />
         <link rel="apple-touch-icon" sizes="114x114" th:href="@{/assets/images/favicon/apple-icon-114x114.png}" />
         <link rel="apple-touch-icon" sizes="120x120" th:href="@{/assets/images/favicon/apple-icon-120x120.png}" />
@@ -85,12 +85,18 @@
                                 <div class="card-body">
                                     <h1 class="card-title">Encrypt</h1>
                                     <p class="card-text">Encrypt a string. The result below will be a Bcrypt encrypted hash.</p>
-                                    <form class="input-group mb-3">
+                                    <form class="input-group mb-3" th:object="${hash}" th:method="post" th:action="@{/hash}">
                                         <input type="text" class="form-control" placeholder="String to encrypt..." aria-label="String to encrypt..." aria-describedby="basic-addon2" />
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button">Hash!</button>
+                                            <button class="btn btn-outline-secondary" type="submit">Hash!</button>
                                         </div>
                                     </form>
+                                    <h4 th:if="${messageSuccess}">Hash Generated</h4>
+                                    <div id="message-holder">
+                                        <div th:if="${messageSuccess}" class="alert alert-success" role="alert" th:text="${messageSuccess}">
+                                            [Hash generated string]
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +105,7 @@
                                 <div class="card-body">
                                     <h1 class="card-title">Decrypt</h1>
                                     <p class="card-text">Test your password hash against a plaintext password, to see if they match.</p>
-                                    <form>
+                                    <div><!--hehe-->
                                         <div class="form-group">
                                             <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Hash to check..." />
                                         </div>
@@ -111,7 +117,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div><!--hehe-->
+                                    <div class="alert alert-success" role="alert">
+                                        Good hash! :)
+                                    </div>
+                                    <div class="alert alert-danger" role="alert">
+                                        Bad hash! :)
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -185,11 +197,7 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script th:src="@{/assets/common-js/slim.min.js}"></script>
-        <script>window.jQuery || document.write('<script src="/assets/common-js/slim.min.js"><\/script>')</script>
-        <script th:src="@{/assets/common-js/popper.min.js}"></script>
-        <!--<script th:src="@{/assets/bootstrap/js/bootstrap.min.js}"></script>-->
-
+        <script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
         <script th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.min.js}"></script>
         <script th:src="@{/assets/common-js/holder.min.js}"></script>
     </body>
