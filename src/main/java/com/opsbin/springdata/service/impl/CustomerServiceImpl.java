@@ -37,7 +37,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer updateCustomer(Customer customer) {
-        return customerRepository.save(customer);
+        Customer newCustomer = new Customer();
+        if (customerRepository.existsById(customer.getId())) {
+            newCustomer = getCustomer(customer.getId()).get();
+            newCustomer.setAddress(customer.getAddress());
+            newCustomer.setContact(customer.getContact());
+            newCustomer.setName(customer.getName());
+            newCustomer.setPhone(customer.getPhone());
+        }
+        return customerRepository.save(newCustomer);
     }
 
     @Override
@@ -46,7 +54,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(Customer customer) {
-        customerRepository.delete(customer);
+    public void deleteCustomer(Long customerId) {
+        if (customerRepository.existsById(customerId)) {
+            customerRepository.delete(getCustomer(customerId).get());
+        }
     }
 }

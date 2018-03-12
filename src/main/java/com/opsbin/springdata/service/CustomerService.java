@@ -35,7 +35,7 @@ public interface CustomerService {
 
     /**
      * delete a customer
-     * @param customer
+     * @param customerId
      */
-    public void deleteCustomer(Customer customer);
+    public void deleteCustomer(Long customerId);
 }
