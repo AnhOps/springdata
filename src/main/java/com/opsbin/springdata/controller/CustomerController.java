@@ -1,68 +1,91 @@
 package com.opsbin.springdata.controller;
 
+import com.opsbin.springdata.constants.UrlConstants;
 import com.opsbin.springdata.entity.Customer;
 import com.opsbin.springdata.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController
-public class CustomerController {
+@Controller
+public class CustomerController extends AbstractController {
 
     @Autowired
     private CustomerService customerService;
 
+    protected static final String VIEW_CREATE_FORM_CUSTOMER = "customer/customer-create-form";
+    protected static final String VIEW_UPDATE_FORM_CUSTOMER = "customer/customer-update-form";
+    protected static final String VIEW_LIST_CUSTOMERS = "customer/customer";
+
+    protected static final String MODEL_ATTRIBUTE_CUSTOMERS = "customers";
+    protected static final String MODEL_ATTRIBUTE_CUSTOMER = "customer";
+
+    protected static final String PARAMETER_CUSTOMER_ID = "customerId";
+
     /**
-     * URL: http://{hostname}:{port}/api/customers
+     * URL: http://{hostname}:{port}/customers/new
      * HTTP method: GET
      */
-    @RequestMapping(value = "/api/customers", method = RequestMethod.GET)
-    public ResponseEntity<?> getCustomers() {
-        Iterable<Customer> customersList = customerService.getCustomers();
-        return new ResponseEntity<>(customersList, HttpStatus.OK);
+    @GetMapping(UrlConstants.CUSTOMERS_CREATE)
+    public String createCustomerForm(Model model) {
+        Customer customer = new Customer();
+        model.addAttribute(customer);
+        return VIEW_CREATE_FORM_CUSTOMER;
     }
 
     /**
-     * URL: http://{hostname}:{port}/api/customers/{customerId}
-     * HTTP method: GET
-     */
-    @RequestMapping(value="/api/customers/{customerId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getCustomer(@PathVariable long customerId) {
-        Optional<Customer> customer = customerService.getCustomer(customerId);
-        return new ResponseEntity<>(customer, HttpStatus.OK);
-    }
-
-    /**
-     * URL: http://{hostname}:{port}/api/customers
+     * URL: http://{hostname}:{port}/customers/new
      * HTTP method: POST
      */
-    @RequestMapping(value="/api/customers", method = RequestMethod.POST)
-    public ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
-        Customer newCustomer = customerService.addCustomer(customer);
-        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+    @PostMapping(UrlConstants.CUSTOMERS_CREATE)
+    public String createCustomer(Customer customer) {
+        Customer addedCustomer = customerService.addCustomer(customer);
+        return redirectTo(UrlConstants.CUSTOMERS_RETRIEVE);
     }
 
     /**
-     * URL: http://{hostname}:{port}/api/customers
-     * HTTP method: PUT
+     * URL: http://{hostname}:{port}/customers/list
+     * HTTP method: GET
      */
-    @RequestMapping(value = "/api/customers", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) {
+    @GetMapping(UrlConstants.CUSTOMERS_RETRIEVE)
+    public String retrieveCustomers(Model model) {
+        Iterable<Customer> customersList = customerService.getCustomers();
+        model.addAttribute(MODEL_ATTRIBUTE_CUSTOMERS, customersList);
+        return VIEW_LIST_CUSTOMERS;
+    }
+
+    /**
+     * URL: http://{hostname}:{port}/customers/update/{customerId}
+     * HTTP method: GET
+     */
+    @GetMapping(UrlConstants.CUSTOMERS_UPDATE)
+    public String updateCustomerForm(@PathVariable(PARAMETER_CUSTOMER_ID) Long customerId, Model model) {
+        Optional<Customer> customer = customerService.getCustomer(customerId);
+        model.addAttribute(MODEL_ATTRIBUTE_CUSTOMER, customer);
+        return VIEW_UPDATE_FORM_CUSTOMER;
+    }
+
+    /**
+     * URL: http://{hostname}:{port}/customers/update/{customerId}
+     * HTTP method: POST
+     */
+    @PostMapping(UrlConstants.CUSTOMERS_UPDATE)
+    public String updateCustomer(@ModelAttribute(MODEL_ATTRIBUTE_CUSTOMER) Customer customer) {
         Customer updatedCustomer = customerService.updateCustomer(customer);
-        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+        return redirectTo(UrlConstants.CUSTOMERS_RETRIEVE);
     }
 
     /**
-     * URL: http://{hostname}:{port}/api/customers/{customerId}
-     * HTTP method: DELETE
+     * URL: http://{hostname}:{port}/customers/delete/{customerId}
+     * HTTP method: GET
      */
-    @RequestMapping(value = "/api/customers/{customerId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteCustomer(@PathVariable long customerId) {
+    @GetMapping(UrlConstants.CUSTOMERS_DELETE)
+    public String deleteCustomer(@PathVariable(PARAMETER_CUSTOMER_ID) Long customerId) {
         customerService.deleteCustomer(customerId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return redirectTo(UrlConstants.CUSTOMERS_RETRIEVE);
     }
 
 }
