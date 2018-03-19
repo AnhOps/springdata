@@ -1,6 +1,6 @@
 package com.opsbin.springdata.model;
 
-public class Hash {
+public class HashEncode {
     private String plainText;
 
     public String getPlainText() {

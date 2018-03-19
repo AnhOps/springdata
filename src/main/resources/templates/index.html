@@ -85,15 +85,15 @@
                                 <div class="card-body">
                                     <h1 class="card-title">Encrypt</h1>
                                     <p class="card-text">Encrypt a string. The result below will be a Bcrypt encrypted hash.</p>
-                                    <form class="input-group mb-3" th:object="${hash}" th:method="post" th:action="@{/hash}">
-                                        <input type="text" class="form-control" placeholder="String to encrypt..." aria-label="String to encrypt..." aria-describedby="basic-addon2" />
+                                    <form class="input-group mb-3" th:object="${hashEncode}" th:method="post" th:action="@{${T(com.opsbin.springdata.constants.UrlConstants).HASH_GENERATE}}">
+                                        <input type="text" th:field="*{plainText}" class="form-control" placeholder="String to encrypt..." aria-label="String to encrypt..." aria-describedby="basic-addon2" />
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary" type="submit">Hash!</button>
                                         </div>
                                     </form>
-                                    <h4 th:if="${messageSuccess}">Hash Generated</h4>
+                                    <h4 th:if="${message}">Hash Generated</h4>
                                     <div id="message-holder">
-                                        <div th:if="${messageSuccess}" class="alert alert-success" role="alert" th:text="${messageSuccess}">
+                                        <div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}">
                                             [Hash generated string]
                                         </div>
                                     </div>
@@ -105,24 +105,24 @@
                                 <div class="card-body">
                                     <h1 class="card-title">Decrypt</h1>
                                     <p class="card-text">Test your password hash against a plaintext password, to see if they match.</p>
-                                    <div><!--hehe-->
+                                    <form th:object="${hashCheck}" th:method="post" th:action="@{${T(com.opsbin.springdata.constants.UrlConstants).HASH_CHECK}}">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Hash to check..." />
+                                            <input th:field="*{encodedText}" type="text" class="form-control" id="formGroupExampleInput" placeholder="Hash to check..." />
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control" placeholder="String to check against..." aria-label="String to check against..." aria-describedby="basic-addon2" />
+                                                <input th:field="*{plainText}" type="text" class="form-control" placeholder="String to check against..." aria-label="String to check against..." aria-describedby="basic-addon2" />
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-outline-secondary" type="button">Check!</button>
+                                                    <button class="btn btn-outline-secondary" type="submit">Check!</button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div><!--hehe-->
-                                    <div class="alert alert-success" role="alert">
-                                        Good hash! :)
+                                    </form>
+                                    <div th:if="${messageSuccess}" class="alert alert-success" role="alert" th:text="${messageSuccess}">
+                                        [Good hash! :)]
                                     </div>
-                                    <div class="alert alert-danger" role="alert">
-                                        Bad hash! :)
+                                    <div th:if="${messageFail}" class="alert alert-danger" role="alert" th:text="${messageFail}">
+                                        [Bad hash! :)]
                                     </div>
                                 </div>
                             </div>
