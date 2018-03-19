@@ -11,9 +11,9 @@ import java.util.Locale;
 @Component
 public class WebUI {
 
-    public static final String MESSAGE = "message";
-    public static final String MESSAGE_SUCCESS = "messageSuccess";
-    public static final String MESSAGE_FAIL = "messageFail";
+    public static final String MESSAGE          = "message";
+    public static final String MESSAGE_SUCCESS  = "messageSuccess";
+    public static final String MESSAGE_FAIL     = "messageFail";
 
     @Resource
     private MessageSource messageSource;
@@ -24,18 +24,16 @@ public class WebUI {
     }
 
     public void addMessageSuccess(RedirectAttributes redirectAttributes, String code, Object... params) {
-        String localizedFeedbackMessage = getMessage(code, params);
-        redirectAttributes.addFlashAttribute(MESSAGE_SUCCESS, localizedFeedbackMessage);
+        addMessage(redirectAttributes, MESSAGE_SUCCESS, code, params);
     }
 
     public void addMessageFail(RedirectAttributes redirectAttributes, String code, Object... params) {
-        String localizedFeedbackMessage = getMessage(code, params);
-        redirectAttributes.addFlashAttribute(MESSAGE_FAIL, localizedFeedbackMessage);
+        addMessage(redirectAttributes, MESSAGE_FAIL, code, params);
     }
 
     public void addMessage(RedirectAttributes redirectAttributes, String messageDef, String code, Object... params) {
         String localizedFeedbackMessage = getMessage(code, params);
-        if (messageDef == null) {
+        if (messageDef == null || messageDef.isEmpty()) {
             redirectAttributes.addFlashAttribute(MESSAGE, localizedFeedbackMessage);
         } else {
             redirectAttributes.addFlashAttribute(messageDef, localizedFeedbackMessage);
