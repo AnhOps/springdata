@@ -42,7 +42,7 @@ public class HashController extends AbstractController {
         if ((hashEncode != null)) {
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashed = passwordEncoder.encode(hashEncode.getPlainText());
-            webUI.addMessage(attributes, null, FEEDBACK_MESSAGE_HASHED, hashed);
+            webUI.addMessage(attributes, FEEDBACK_MESSAGE_HASHED, hashed);
         }
         return redirectTo(UrlConstants.HOME);
     }

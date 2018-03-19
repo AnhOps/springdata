@@ -31,7 +31,11 @@ public class WebUI {
         addMessage(redirectAttributes, MESSAGE_FAIL, code, params);
     }
 
-    public void addMessage(RedirectAttributes redirectAttributes, String messageDef, String code, Object... params) {
+    public void addMessage(RedirectAttributes redirectAttributes, String code, Object... params) {
+        addMessage(redirectAttributes, MESSAGE, code, params);
+    }
+
+    private void addMessage(RedirectAttributes redirectAttributes, String messageDef, String code, Object... params) {
         String localizedFeedbackMessage = getMessage(code, params);
         if (messageDef == null || messageDef.isEmpty()) {
             redirectAttributes.addFlashAttribute(MESSAGE, localizedFeedbackMessage);
